@@ -56,6 +56,13 @@ $selectionCounter.Size = New-Object System.Drawing.Size(220, 22)
 $selectionCounter.ForeColor = [System.Drawing.Color]::LightSkyBlue
 $form.Controls.Add($selectionCounter)
 
+$appliedCounter = New-Object System.Windows.Forms.Label
+$appliedCounter.Text = "Applied: 0"
+$appliedCounter.Location = New-Object System.Drawing.Point(690, 20)
+$appliedCounter.Size = New-Object System.Drawing.Size(160, 22)
+$appliedCounter.ForeColor = [System.Drawing.Color]::LightGreen
+$form.Controls.Add($appliedCounter)
+
 $tabs = New-Object System.Windows.Forms.TabControl
 $tabs.Location = New-Object System.Drawing.Point(20, 55)
 $tabs.Size = New-Object System.Drawing.Size(860, 580)
@@ -263,27 +270,35 @@ foreach ($feature in $perfFeatures) {
 
 $y = 780
 
+# Footer panel for controls
+$footerPanel = New-Object System.Windows.Forms.Panel
+$footerPanel.Location = New-Object System.Drawing.Point(20, 650)
+$footerPanel.Size = New-Object System.Drawing.Size(860, 80)
+$footerPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 30, 30, 30)
+$footerPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+$form.Controls.Add($footerPanel)
+
 $dnsLabel = New-Object System.Windows.Forms.Label
 $dnsLabel.Text = "DNS Over HTTPS Mode:"
-$dnsLabel.Location = New-Object System.Drawing.Point(35, 655)
-$dnsLabel.Size = New-Object System.Drawing.Size(160, 20)
-$form.Controls.Add($dnsLabel)
+$dnsLabel.Location = New-Object System.Drawing.Point(10, 12)
+$dnsLabel.Size = New-Object System.Drawing.Size(170, 20)
+$footerPanel.Controls.Add($dnsLabel)
 
 $dnsDropdown = New-Object System.Windows.Forms.ComboBox
-$dnsDropdown.Location = New-Object System.Drawing.Point(200, 650)
-$dnsDropdown.Size = New-Object System.Drawing.Size(150, 20)
+$dnsDropdown.Location = New-Object System.Drawing.Point(185, 10)
+$dnsDropdown.Size = New-Object System.Drawing.Size(160, 24)
 $dnsDropdown.Items.AddRange(@("automatic", "off", "custom"))
 $dnsDropdown.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $dnsDropdown.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $dnsDropdown.ForeColor = [System.Drawing.Color]::White
-$form.Controls.Add($dnsDropdown)
+$footerPanel.Controls.Add($dnsDropdown)
 $y += 40
 
 $exportButton = New-Object System.Windows.Forms.Button
 $exportButton.Text = "Export Settings"
-$exportButton.Location = New-Object System.Drawing.Point(50, 690)
-$exportButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($exportButton)
+$exportButton.Location = New-Object System.Drawing.Point(360, 8)
+$exportButton.Size = New-Object System.Drawing.Size(115, 30)
+$footerPanel.Controls.Add($exportButton)
 $exportButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $exportButton.FlatAppearance.BorderSize = 1
 $exportButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -292,9 +307,9 @@ $exportButton.ForeColor = [System.Drawing.Color]::LightSalmon
 
 $importButton = New-Object System.Windows.Forms.Button
 $importButton.Text = "Import Settings"
-$importButton.Location = New-Object System.Drawing.Point(210, 690)
-$importButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($importButton)
+$importButton.Location = New-Object System.Drawing.Point(480, 8)
+$importButton.Size = New-Object System.Drawing.Size(115, 30)
+$footerPanel.Controls.Add($importButton)
 $importButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $importButton.FlatAppearance.BorderSize = 1
 $importButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -303,9 +318,9 @@ $importButton.ForeColor = [System.Drawing.Color]::LightSkyBlue
 
 $saveButton = New-Object System.Windows.Forms.Button
 $saveButton.Text = "Apply Settings"
-$saveButton.Location = New-Object System.Drawing.Point(410, 690)
-$saveButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($saveButton)
+$saveButton.Location = New-Object System.Drawing.Point(600, 8)
+$saveButton.Size = New-Object System.Drawing.Size(115, 30)
+$footerPanel.Controls.Add($saveButton)
 $saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $saveButton.FlatAppearance.BorderSize = 1
 $saveButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -329,6 +344,19 @@ $saveButton.Add_Click({
         Set-DnsMode -dnsMode $dnsDropdown.SelectedItem
     }
 
+    # compute applied now by checking which policy keys exist and match configured value
+    $applied = 0
+    foreach ($cb in $allFeatures) {
+        $tag = $cb.Tag
+        try {
+            $current = (Get-ItemProperty -Path $registryPath -Name $tag.Key -ErrorAction SilentlyContinue).$($tag.Key)
+            if ($null -ne $current) {
+                if ($tag.Type -eq 'DWord') { $current = [int]$current }
+                if ($current -eq $tag.Value) { $applied++ }
+            }
+        } catch {}
+    }
+    $appliedCounter.Text = "Applied: $applied"
     [System.Windows.Forms.MessageBox]::Show("Settings applied successfully! Restart Brave to see changes.", "SlimBrave", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 })
 
@@ -368,9 +396,9 @@ function Reset-AllSettings {
 
 $resetButton = New-Object System.Windows.Forms.Button
 $resetButton.Text = "Reset All Settings"
-$resetButton.Location = New-Object System.Drawing.Point(570, 690)
+$resetButton.Location = New-Object System.Drawing.Point(720, 8)
 $resetButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($resetButton)
+$footerPanel.Controls.Add($resetButton)
 $resetButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $resetButton.FlatAppearance.BorderSize = 1
 $resetButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -379,9 +407,9 @@ $resetButton.ForeColor = [System.Drawing.Color]::LightCoral
 
 $selectAllButton = New-Object System.Windows.Forms.Button
 $selectAllButton.Text = "Select All"
-$selectAllButton.Location = New-Object System.Drawing.Point(720, 650)
-$selectAllButton.Size = New-Object System.Drawing.Size(100, 30)
-$form.Controls.Add($selectAllButton)
+$selectAllButton.Location = New-Object System.Drawing.Point(600, 44)
+$selectAllButton.Size = New-Object System.Drawing.Size(115, 26)
+$footerPanel.Controls.Add($selectAllButton)
 $selectAllButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $selectAllButton.FlatAppearance.BorderSize = 1
 $selectAllButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -390,20 +418,61 @@ $selectAllButton.ForeColor = [System.Drawing.Color]::LightGreen
 
 $deselectAllButton = New-Object System.Windows.Forms.Button
 $deselectAllButton.Text = "Deselect All"
-$deselectAllButton.Location = New-Object System.Drawing.Point(720, 690)
-$deselectAllButton.Size = New-Object System.Drawing.Size(100, 30)
-$form.Controls.Add($deselectAllButton)
+$deselectAllButton.Location = New-Object System.Drawing.Point(720, 44)
+$deselectAllButton.Size = New-Object System.Drawing.Size(120, 26)
+$footerPanel.Controls.Add($deselectAllButton)
 $deselectAllButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $deselectAllButton.FlatAppearance.BorderSize = 1
 $deselectAllButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
 $deselectAllButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
 $deselectAllButton.ForeColor = [System.Drawing.Color]::Orange
 
+# Layout: organize footer controls with FlowLayoutPanels for consistent spacing
+$flowTop = New-Object System.Windows.Forms.FlowLayoutPanel
+$flowTop.Dock = [System.Windows.Forms.DockStyle]::Top
+$flowTop.Height = 42
+$flowTop.WrapContents = $false
+$flowTop.FlowDirection = [System.Windows.Forms.FlowDirection]::LeftToRight
+$flowTop.BackColor = [System.Drawing.Color]::FromArgb(255, 30, 30, 30)
+$flowTop.Padding = New-Object System.Windows.Forms.Padding(8,8,8,6)
+$footerPanel.Controls.Add($flowTop)
+
+$dnsLabel.Margin = New-Object System.Windows.Forms.Padding(0,4,8,0)
+$dnsDropdown.Margin = New-Object System.Windows.Forms.Padding(0,2,16,0)
+$exportButton.Margin = New-Object System.Windows.Forms.Padding(0,0,8,0)
+$importButton.Margin = New-Object System.Windows.Forms.Padding(0,0,8,0)
+$saveButton.Margin   = New-Object System.Windows.Forms.Padding(0,0,8,0)
+$resetButton.Margin  = New-Object System.Windows.Forms.Padding(0,0,0,0)
+
+# Move existing controls into the flow container
+$footerPanel.Controls.Remove($dnsLabel);      $flowTop.Controls.Add($dnsLabel)
+$footerPanel.Controls.Remove($dnsDropdown);   $flowTop.Controls.Add($dnsDropdown)
+$footerPanel.Controls.Remove($exportButton);  $flowTop.Controls.Add($exportButton)
+$footerPanel.Controls.Remove($importButton);  $flowTop.Controls.Add($importButton)
+$footerPanel.Controls.Remove($saveButton);    $flowTop.Controls.Add($saveButton)
+$footerPanel.Controls.Remove($resetButton);   $flowTop.Controls.Add($resetButton)
+
+$flowBottom = New-Object System.Windows.Forms.FlowLayoutPanel
+$flowBottom.Dock = [System.Windows.Forms.DockStyle]::Bottom
+$flowBottom.Height = 34
+$flowBottom.WrapContents = $false
+$flowBottom.FlowDirection = [System.Windows.Forms.FlowDirection]::RightToLeft
+$flowBottom.BackColor = [System.Drawing.Color]::FromArgb(255, 30, 30, 30)
+$flowBottom.Padding = New-Object System.Windows.Forms.Padding(8,4,8,6)
+$footerPanel.Controls.Add($flowBottom)
+
+$deselectAllButton.Margin = New-Object System.Windows.Forms.Padding(0,0,0,0)
+$selectAllButton.Margin   = New-Object System.Windows.Forms.Padding(8,0,8,0)
+
+$footerPanel.Controls.Remove($deselectAllButton); $flowBottom.Controls.Add($deselectAllButton)
+$footerPanel.Controls.Remove($selectAllButton);   $flowBottom.Controls.Add($selectAllButton)
+
 $resetButton.Add_Click({
     if (Reset-AllSettings) {
         if (-not (Test-Path -Path $registryPath)) {
             New-Item -Path $registryPath -Force | Out-Null
         }
+        $appliedCounter.Text = "Applied: 0"
     }
 })
 
@@ -510,5 +579,19 @@ function Apply-Filter([string] $query) {
 
 $null = $searchBox.add_TextChanged({ Apply-Filter $searchBox.Text })
 Update-SelectedCount
+
+# Refresh applied counter at load based on registry values
+try {
+    $appliedInit = 0
+    foreach ($cb in $allFeatures) {
+        $tag = $cb.Tag
+        $current = (Get-ItemProperty -Path $registryPath -Name $tag.Key -ErrorAction SilentlyContinue).$($tag.Key)
+        if ($null -ne $current) {
+            if ($tag.Type -eq 'DWord') { $current = [int]$current }
+            if ($current -eq $tag.Value) { $appliedInit++ }
+        }
+    }
+    $appliedCounter.Text = "Applied: $appliedInit"
+} catch {}
 
 [void] $form.ShowDialog()
