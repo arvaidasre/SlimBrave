@@ -116,7 +116,7 @@ SlimBrave v2.0 is a comprehensive PowerShell script designed for Windows users t
 ### Run the command below in PowerShell:
 
 ```ps1
-iwr "https://raw.githubusercontent.com/arvre/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
+iwr "https://raw.githubusercontent.com/arvaidasre/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
 ```
 
 ---
