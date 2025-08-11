@@ -10,7 +10,10 @@
         "BraveVPNDisabled",
         "BraveAIChatEnabled",
         "TorDisabled",
-        "DeveloperToolsDisabled"
+        "DeveloperToolsDisabled",
+        "DefaultNotificationsSetting",
+        "DefaultPopupsSetting",
+        "DefaultGeolocationSetting"
     ],
     "DnsMode": "custom"
 }

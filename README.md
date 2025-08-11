@@ -40,13 +40,13 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
    Sync functionality that synchronizes your data across devices.
 
 - **Telemetry & Reporting Controls**  
-   Disable metrics reporting, safe browsing reporting, and data collection.
+   Disable metrics reporting, safe browsing reporting, crash reporting, and URL-keyed data collection.
 
 - **Privacy & Security Options**  
-   Manage autofill, WebRTC, QUIC protocol, and more.
+   Manage autofill, WebRTC, QUIC, Privacy Sandbox, prefetch/preload, background sync, guest mode, payment method queries, and more.
 
 - **Performance Optimization**  
-   Disable background processes and unnecessary features.
+   Disable background processes, hardware acceleration, media router (Cast), alternate error pages, component updates, and unnecessary features.
 
 - **Enable Do Not Track**  
    Forces Do Not Track header for all browsing.
@@ -80,6 +80,9 @@ SlimBrave is a powerful PowerShell script designed for Windows users to streamli
 
 - **Disable Brave Shields**  
    Turns off Brave's built-in Shields protection.
+
+- **Hardening & Content Controls**  
+   Block notifications (with quiet prompts), pop-ups, geolocation, WebUSB, WebBluetooth, Web Serial, and file system write access.
 </details>
 
 ---

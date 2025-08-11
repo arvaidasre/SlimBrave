@@ -4,6 +4,7 @@
         "SafeBrowsingExtendedReportingEnabled",
         "UrlKeyedAnonymizedDataCollectionEnabled",
         "FeedbackSurveysEnabled",
+        "CrashReportingEnabled",
         "BraveRewardsDisabled",
         "BraveWalletDisabled",
         "BraveVPNDisabled",
@@ -12,7 +13,11 @@
         "MediaRecommendationsEnabled",
         "ShoppingListEnabled",
         "PromotionsEnabled",
-        "DefaultBrowserSettingEnabled"
+        "DefaultBrowserSettingEnabled",
+        "PrivacySandboxEnabled",
+        "PrivacySandboxPromptEnabled",
+        "NetworkPredictionOptions",
+        "PreloadPagesState"
     ],
     "DnsMode": "automatic"
 }

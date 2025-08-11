@@ -26,7 +26,7 @@ function Set-DnsMode {
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
-$form.Size = New-Object System.Drawing.Size(755, 670)
+$form.Size = New-Object System.Drawing.Size(800, 760)
 $form.StartPosition = "CenterScreen"
 $form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $form.MaximizeBox = $false
@@ -36,9 +36,10 @@ $allFeatures = @()
 
 $leftPanel = New-Object System.Windows.Forms.Panel
 $leftPanel.Location = New-Object System.Drawing.Point(20, 20)
-$leftPanel.Size = New-Object System.Drawing.Size(340,500)
+$leftPanel.Size = New-Object System.Drawing.Size(360,580)
 $leftPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
 $leftPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+$leftPanel.AutoScroll = $true
 $form.Controls.Add($leftPanel)
 
 $telemetryLabel = New-Object System.Windows.Forms.Label
@@ -93,7 +94,15 @@ $privacyFeatures = @(
     @{ Name = "Force Google SafeSearch"; Key = "ForceGoogleSafeSearch"; Value = 1; Type = "DWord" },
     @{ Name = "Disable IPFS"; Key = "IPFSEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 1; Type = "DWord" },
-    @{ Name = "Force Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 2; Type = "DWord" }
+    @{ Name = "Force Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 2; Type = "DWord" },
+    @{ Name = "Disable Crash Reporting"; Key = "CrashReportingEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Privacy Sandbox"; Key = "PrivacySandboxEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Privacy Sandbox Prompt"; Key = "PrivacySandboxPromptEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Network Prediction/Prefetch"; Key = "NetworkPredictionOptions"; Value = 2; Type = "DWord" },
+    @{ Name = "Disable Preload Pages"; Key = "PreloadPagesState"; Value = 1; Type = "DWord" },
+    @{ Name = "Disable Background Sync"; Key = "BackgroundSyncEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Guest Mode"; Key = "BrowserGuestModeEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Payment Method Queries"; Key = "PaymentMethodQueryEnabled"; Value = 0; Type = "DWord" }
 )
 
 foreach ($feature in $privacyFeatures) {
@@ -110,9 +119,10 @@ foreach ($feature in $privacyFeatures) {
 
 $rightPanel = New-Object System.Windows.Forms.Panel
 $rightPanel.Location = New-Object System.Drawing.Point(380, 20)
-$rightPanel.Size = New-Object System.Drawing.Size(340, 540)
+$rightPanel.Size = New-Object System.Drawing.Size(360, 580)
 $rightPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
 $rightPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+$rightPanel.AutoScroll = $true
 $form.Controls.Add($rightPanel)
 
 $y = 5
@@ -171,7 +181,11 @@ $perfFeatures = @(
     @{ Name = "Disable Search Suggestions"; Key = "SearchSuggestEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Printing"; Key = "PrintingEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Default Browser Prompt"; Key = "DefaultBrowserSettingEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Developer Tools"; Key = "DeveloperToolsDisabled"; Value = 1; Type = "DWord" }
+    @{ Name = "Disable Developer Tools"; Key = "DeveloperToolsDisabled"; Value = 1; Type = "DWord" },
+    @{ Name = "Disable Hardware Acceleration"; Key = "HardwareAccelerationModeEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Media Router (Cast)"; Key = "EnableMediaRouter"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Alternate Error Pages"; Key = "AlternateErrorPagesEnabled"; Value = 0; Type = "DWord" },
+    @{ Name = "Disable Component Updates"; Key = "ComponentUpdatesEnabled"; Value = 0; Type = "DWord" }
 )
 
 foreach ($feature in $perfFeatures) {
@@ -186,29 +200,68 @@ foreach ($feature in $perfFeatures) {
     $y += 25
 }
 
-$y = 780
+$y += 10
+
+$hardeningLabel = New-Object System.Windows.Forms.Label
+$hardeningLabel.Text = "Hardening & Content Controls"
+$hardeningLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif", 11, [System.Drawing.FontStyle]::Bold)
+$hardeningLabel.Location = New-Object System.Drawing.Point(28, $y)
+$hardeningLabel.Size = New-Object System.Drawing.Size(300, 20)
+$hardeningLabel.ForeColor = [System.Drawing.Color]::LightSalmon
+$rightPanel.Controls.Add($hardeningLabel)
+$y += 25
+
+$hardeningFeatures = @(
+    @{ Name = "Block Notifications"; Key = "DefaultNotificationsSetting"; Value = 2; Type = "DWord" },
+    @{ Name = "Enable Quiet Notification Prompts"; Key = "EnableQuietNotificationPrompts"; Value = 1; Type = "DWord" },
+    @{ Name = "Block Pop-ups"; Key = "DefaultPopupsSetting"; Value = 2; Type = "DWord" },
+    @{ Name = "Block Geolocation"; Key = "DefaultGeolocationSetting"; Value = 2; Type = "DWord" },
+    @{ Name = "Block Web Bluetooth"; Key = "DefaultWebBluetoothGuardSetting"; Value = 2; Type = "DWord" },
+    @{ Name = "Block WebUSB"; Key = "DefaultWebUsbGuardSetting"; Value = 2; Type = "DWord" },
+    @{ Name = "Block Web Serial"; Key = "DefaultSerialGuardSetting"; Value = 2; Type = "DWord" },
+    @{ Name = "Block File System Write"; Key = "DefaultFileSystemWriteGuardSetting"; Value = 2; Type = "DWord" }
+)
+
+foreach ($feature in $hardeningFeatures) {
+    $checkbox = New-Object System.Windows.Forms.CheckBox
+    $checkbox.Text = $feature.Name
+    $checkbox.Tag = $feature
+    $checkbox.Location = New-Object System.Drawing.Point(30, $y)
+    $checkbox.Size = New-Object System.Drawing.Size(300, 20)
+    $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $rightPanel.Controls.Add($checkbox)
+    $allFeatures += $checkbox
+    $y += 25
+}
+
+$bottomPanel = New-Object System.Windows.Forms.Panel
+$bottomPanel.Dock = [System.Windows.Forms.DockStyle]::Bottom
+$bottomPanel.Height = 90
+$bottomPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
+$bottomPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+$form.Controls.Add($bottomPanel)
 
 $dnsLabel = New-Object System.Windows.Forms.Label
 $dnsLabel.Text = "DNS Over HTTPS Mode:"
-$dnsLabel.Location = New-Object System.Drawing.Point(35, 535)
-$dnsLabel.Size = New-Object System.Drawing.Size(140, 20)
-$form.Controls.Add($dnsLabel)
+$dnsLabel.Location = New-Object System.Drawing.Point(20, 15)
+$dnsLabel.Size = New-Object System.Drawing.Size(160, 20)
+$dnsLabel.ForeColor = [System.Drawing.Color]::White
+$bottomPanel.Controls.Add($dnsLabel)
 
 $dnsDropdown = New-Object System.Windows.Forms.ComboBox
-$dnsDropdown.Location = New-Object System.Drawing.Point(180,530)
-$dnsDropdown.Size = New-Object System.Drawing.Size(150, 20)
+$dnsDropdown.Location = New-Object System.Drawing.Point(190, 12)
+$dnsDropdown.Size = New-Object System.Drawing.Size(150, 22)
 $dnsDropdown.Items.AddRange(@("automatic", "off", "custom"))
 $dnsDropdown.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $dnsDropdown.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $dnsDropdown.ForeColor = [System.Drawing.Color]::White
-$form.Controls.Add($dnsDropdown)
-$y += 40
+$bottomPanel.Controls.Add($dnsDropdown)
 
 $exportButton = New-Object System.Windows.Forms.Button
 $exportButton.Text = "Export Settings"
-$exportButton.Location = New-Object System.Drawing.Point(50, 580)
+$exportButton.Location = New-Object System.Drawing.Point(360, 48)
 $exportButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($exportButton)
+$bottomPanel.Controls.Add($exportButton)
 $exportButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $exportButton.FlatAppearance.BorderSize = 1
 $exportButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -217,9 +270,9 @@ $exportButton.ForeColor = [System.Drawing.Color]::LightSalmon
 
 $importButton = New-Object System.Windows.Forms.Button
 $importButton.Text = "Import Settings"
-$importButton.Location = New-Object System.Drawing.Point(210, 580)
+$importButton.Location = New-Object System.Drawing.Point(500, 48)
 $importButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($importButton)
+$bottomPanel.Controls.Add($importButton)
 $importButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $importButton.FlatAppearance.BorderSize = 1
 $importButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -228,9 +281,9 @@ $importButton.ForeColor = [System.Drawing.Color]::LightSkyBlue
 
 $saveButton = New-Object System.Windows.Forms.Button
 $saveButton.Text = "Apply Settings"
-$saveButton.Location = New-Object System.Drawing.Point(410,580)
+$saveButton.Location = New-Object System.Drawing.Point(640, 48)
 $saveButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($saveButton)
+$bottomPanel.Controls.Add($saveButton)
 $saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $saveButton.FlatAppearance.BorderSize = 1
 $saveButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -285,7 +338,7 @@ function Reset-AllSettings {
                 [System.Windows.Forms.MessageBoxIcon]::Error
             )
             return $false
-        }
+        }   
     }
 
     return $false
@@ -293,15 +346,14 @@ function Reset-AllSettings {
 
 $resetButton = New-Object System.Windows.Forms.Button
 $resetButton.Text = "Reset All Settings"
-$resetButton.Location = New-Object System.Drawing.Point(570,580)
+$resetButton.Location = New-Object System.Drawing.Point(20, 48)
 $resetButton.Size = New-Object System.Drawing.Size(120, 30)
-$form.Controls.Add($resetButton)
+$bottomPanel.Controls.Add($resetButton)
 $resetButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $resetButton.FlatAppearance.BorderSize = 1
 $resetButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
 $resetButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
 $resetButton.ForeColor = [System.Drawing.Color]::LightCoral
-$y += 40
 
 $resetButton.Add_Click({
     if (Reset-AllSettings) {
