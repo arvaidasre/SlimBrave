@@ -6,9 +6,9 @@
 
 ---
 
-## Ultimate Brave Browser Debloater
+## Brave Browser Debloater
 
-SlimBrave v2.0 is a comprehensive PowerShell script designed for Windows users to completely strip down their Brave Browser and maximize privacy, security, and performance. With over 60+ configurable options, SlimBrave gives you granular control over every aspect of Brave's functionality.
+SlimBrave is a powerful PowerShell script designed for Windows users to streamline their Brave Browser experience by toggling and configuring unwanted features. With SlimBrave, you can easily disable or enable various Brave functionalities, customize settings, and improve privacy.
 
 ### Features:
 
@@ -80,33 +80,6 @@ SlimBrave v2.0 is a comprehensive PowerShell script designed for Windows users t
 
 - **Disable Brave Shields**  
    Turns off Brave's built-in Shields protection.
-
-- **Advanced Hardware Controls**  
-   Disable hardware acceleration, WebGL, WebAssembly for enhanced security.
-
-- **Media & Device Access Control**  
-   Block camera, microphone, geolocation, push notifications, and device APIs.
-
-- **Web Technology Blocking**  
-   Disable WebUSB, WebBluetooth, WebMIDI, WebXR, WebNFC for maximum security.
-
-- **Cryptocurrency Features Removal**  
-   Remove all crypto-related features including Binance widget, NFT discovery, Ethereum/Solana providers.
-
-- **AI & Smart Features Disable**  
-   Turn off Leo AI Assistant, Brave AI Chat, sidebar, speedreader, and playlist features.
-
-- **Network Security Enhancements**  
-   Disable QUIC protocol, HTTP/2 server push, background sync, and preloading.
-
-- **Strict JavaScript Controls**  
-   Block JavaScript JIT compilation and enforce strict referrer policies.
-
-- **Complete Telemetry Blackout**  
-   Remove all forms of data collection, metrics, and reporting.
-
-- **Background Process Elimination**  
-   Stop all background tasks, component updates, and unnecessary services.
 </details>
 
 ---
@@ -116,7 +89,7 @@ SlimBrave v2.0 is a comprehensive PowerShell script designed for Windows users t
 ### Run the command below in PowerShell:
 
 ```ps1
-iwr "https://raw.githubusercontent.com/arvaidasre/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
+iwr "https://raw.githubusercontent.com/ltx0101/SlimBrave/main/SlimBrave.ps1" -OutFile "SlimBrave.ps1"; .\SlimBrave.ps1
 ```
 
 ---
@@ -126,31 +99,14 @@ iwr "https://raw.githubusercontent.com/arvaidasre/SlimBrave/main/SlimBrave.ps1" 
 <details>
 <summary> Presets </summary>
 
-- **Ultimate Privacy Preset** 🔒  
-   - Complete privacy lockdown with all 60+ features disabled
-   - Blocks ALL telemetry, tracking, and data collection
-   - Disables hardware acceleration, WebGL, WebAssembly, and all device APIs
-   - Removes all cryptocurrency features and AI assistants
-   - Eliminates background processes and network predictions
-   - DNS: Completely disabled (maximum privacy)
-   - Best for: Security researchers, privacy activists, and maximum anonymity needs
 
 - **Maximum Privacy Preset**  
    - Telemetry: Blocks all reporting (metrics, safe browsing, URL collection, feedback).
    - Privacy: Disables autofill, password manager, sign-in, WebRTC leaks, QUIC, and forces Do Not Track.
    - Brave Features: Kills Rewards, Wallet, VPN, AI Chat, Tor, and Sync.
    - Performance: Disables background processes, recommendations, and bloat.
-   - Hardware: Blocks WebGL, camera/mic access, and geolocation.
    - DNS: Uses plain DNS (no HTTPS) to prevent potential logging by DoH providers.
    - Best for: Paranoid users, journalists, activists, or anyone who wants Brave as private as possible.
-
-- **Minimal Footprint Preset** ⚡  
-   - Removes bloatware while maintaining basic functionality
-   - Disables crypto features, AI assistants, and promotional content
-   - Blocks telemetry and unnecessary background processes
-   - Keeps essential security features enabled
-   - DNS: Automatic DoH for security
-   - Best for: Users who want a clean, fast browser without going full privacy mode
 
 - **Balanced Privacy Preset**  
    - Telemetry: Blocks all tracking but keeps basic safe browsing.
@@ -211,37 +167,19 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 
 </div>
 
-### Why SlimBrave v2.0 Matters
+### Why SlimBrave Matters
 
-SlimBrave v2.0 represents the most comprehensive Brave debloating solution available:
-- 🔥 **60+ Privacy & Security Options** - Complete control over every aspect
-- 🚀 **Maximum Performance** - Remove all bloatware and background processes  
-- 🛡️ **Ultimate Privacy** - Block all telemetry, tracking, and data collection
-- 🎯 **Granular Control** - Choose exactly what you want disabled
-- 📱 **Modern UI** - Scrollable interface with advanced preset management
-- ⚙️ **Smart Presets** - From minimal footprint to ultimate privacy lockdown
+In an era of increasingly bloated browsers, SlimBrave puts **you** back in control:
+- 🚀 **Faster browsing** by removing unnecessary features
+- 🛡️ **Enhanced privacy** through granular controls
+- ⚙️ **Transparent customization** without hidden settings
 
 ---
-
-### What's New in v2.0
-- ✅ **60+ Configuration Options** (doubled from v1.0)
-- ✅ **Advanced Hardware Controls** (WebGL, WebAssembly, Hardware Acceleration)
-- ✅ **Complete Crypto Removal** (All Web3/NFT/DeFi features)
-- ✅ **AI Features Blocking** (Leo Assistant, Brave AI Chat)
-- ✅ **Network Security Hardening** (HTTP/2, QUIC, WebRTC improvements)
-- ✅ **Modern Device API Blocking** (WebUSB, WebBluetooth, WebXR, WebNFC)
-- ✅ **Enhanced UI** with scrollable panels and bulk operations
-- ✅ **New Ultimate Privacy Preset** - Maximum anonymity configuration
-- ✅ **Minimal Footprint Preset** - Clean browser without privacy extremes
 
 ### Future Roadmap
 - [x] Add preset configurations (Privacy, Performance, etc.)
 - [x] Create backup/restore functionality
-- [x] Advanced privacy controls (v2.0)
-- [x] Cryptocurrency features removal (v2.0)
-- [x] AI and smart features blocking (v2.0)
 - [ ] Add support for Linux/Mac (WIP)
-- [ ] Browser fingerprinting protection (v3.0)
 
 ---
 <div align="center">

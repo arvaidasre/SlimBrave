@@ -24,9 +24,9 @@ function Set-DnsMode {
 }
 
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "SlimBrave v2.0 - Ultimate Debloater"
+$form.Text = "SlimBrave"
 $form.ForeColor = [System.Drawing.Color]::White
-$form.Size = New-Object System.Drawing.Size(900, 750)
+$form.Size = New-Object System.Drawing.Size(755, 670)
 $form.StartPosition = "CenterScreen"
 $form.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $form.MaximizeBox = $false
@@ -34,57 +34,12 @@ $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 
 $allFeatures = @()
 
-# Search, selection summary and tab layout
-$searchLabel = New-Object System.Windows.Forms.Label
-$searchLabel.Text = "Search:"
-$searchLabel.Location = New-Object System.Drawing.Point(20, 20)
-$searchLabel.Size = New-Object System.Drawing.Size(60, 22)
-$searchLabel.ForeColor = [System.Drawing.Color]::White
-$form.Controls.Add($searchLabel)
-
-$searchBox = New-Object System.Windows.Forms.TextBox
-$searchBox.Location = New-Object System.Drawing.Point(85, 17)
-$searchBox.Size = New-Object System.Drawing.Size(360, 24)
-$searchBox.BackColor = [System.Drawing.Color]::FromArgb(255, 45, 45, 45)
-$searchBox.ForeColor = [System.Drawing.Color]::White
-$form.Controls.Add($searchBox)
-
-$selectionCounter = New-Object System.Windows.Forms.Label
-$selectionCounter.Text = "Selected: 0 / 0"
-$selectionCounter.Location = New-Object System.Drawing.Point(460, 20)
-$selectionCounter.Size = New-Object System.Drawing.Size(220, 22)
-$selectionCounter.ForeColor = [System.Drawing.Color]::LightSkyBlue
-$form.Controls.Add($selectionCounter)
-
-$appliedCounter = New-Object System.Windows.Forms.Label
-$appliedCounter.Text = "Applied: 0"
-$appliedCounter.Location = New-Object System.Drawing.Point(690, 20)
-$appliedCounter.Size = New-Object System.Drawing.Size(160, 22)
-$appliedCounter.ForeColor = [System.Drawing.Color]::LightGreen
-$form.Controls.Add($appliedCounter)
-
-$tabs = New-Object System.Windows.Forms.TabControl
-$tabs.Location = New-Object System.Drawing.Point(20, 55)
-$tabs.Size = New-Object System.Drawing.Size(860, 580)
-$form.Controls.Add($tabs)
-
-$tabPrivacy = New-Object System.Windows.Forms.TabPage
-$tabPrivacy.Text = "Privacy & Telemetry"
-$tabPrivacy.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
-$tabs.TabPages.Add($tabPrivacy)
-
-$tabFeatures = New-Object System.Windows.Forms.TabPage
-$tabFeatures.Text = "Features & Performance"
-$tabFeatures.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
-$tabs.TabPages.Add($tabFeatures)
-
 $leftPanel = New-Object System.Windows.Forms.Panel
-$leftPanel.Location = New-Object System.Drawing.Point(10, 10)
-$leftPanel.Size = New-Object System.Drawing.Size(820, 520)
+$leftPanel.Location = New-Object System.Drawing.Point(20, 20)
+$leftPanel.Size = New-Object System.Drawing.Size(340,500)
 $leftPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
 $leftPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
-$leftPanel.AutoScroll = $true
-$tabPrivacy.Controls.Add($leftPanel)
+$form.Controls.Add($leftPanel)
 
 $telemetryLabel = New-Object System.Windows.Forms.Label
 $telemetryLabel.Text = "Telemetry & Reporting"
@@ -111,7 +66,6 @@ foreach ($feature in $telemetryFeatures) {
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $leftPanel.Controls.Add($checkbox)
     $allFeatures += $checkbox
-    $checkbox.add_CheckedChanged({ Update-SelectedCount })
     $y += 25
 }
 
@@ -139,18 +93,7 @@ $privacyFeatures = @(
     @{ Name = "Force Google SafeSearch"; Key = "ForceGoogleSafeSearch"; Value = 1; Type = "DWord" },
     @{ Name = "Disable IPFS"; Key = "IPFSEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 1; Type = "DWord" },
-    @{ Name = "Force Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 2; Type = "DWord" },
-    @{ Name = "Disable Hardware Acceleration"; Key = "HardwareAccelerationModeEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable WebGL"; Key = "WebGLDisabled"; Value = 1; Type = "DWord" },
-    @{ Name = "Disable WebAssembly"; Key = "WebAssemblyDisabled"; Value = 1; Type = "DWord" },
-    @{ Name = "Disable Push Notifications"; Key = "DefaultNotificationsSetting"; Value = 2; Type = "DWord" },
-    @{ Name = "Disable Geolocation"; Key = "DefaultGeolocationSetting"; Value = 2; Type = "DWord" },
-    @{ Name = "Disable Camera Access"; Key = "VideoCaptureAllowed"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Microphone Access"; Key = "AudioCaptureAllowed"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable WebUSB"; Key = "WebUsbAllowDevicesForUrls"; Value = '[]'; Type = "String" },
-    @{ Name = "Disable WebBluetooth"; Key = "WebBluetoothBlocked"; Value = 1; Type = "DWord" },
-    @{ Name = "Block JavaScript JIT"; Key = "JavaScriptJitSetting"; Value = 2; Type = "DWord" },
-    @{ Name = "Strict Referrer Policy"; Key = "DefaultReferrerPolicy"; Value = 4; Type = "DWord" }
+    @{ Name = "Force Incognito Mode"; Key = "IncognitoModeAvailability"; Value = 2; Type = "DWord" }
 )
 
 foreach ($feature in $privacyFeatures) {
@@ -166,12 +109,11 @@ foreach ($feature in $privacyFeatures) {
 }
 
 $rightPanel = New-Object System.Windows.Forms.Panel
-$rightPanel.Location = New-Object System.Drawing.Point(10, 10)
-$rightPanel.Size = New-Object System.Drawing.Size(820, 520)
+$rightPanel.Location = New-Object System.Drawing.Point(380, 20)
+$rightPanel.Size = New-Object System.Drawing.Size(340, 540)
 $rightPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 35, 35, 35)
 $rightPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
-$rightPanel.AutoScroll = $true
-$tabFeatures.Controls.Add($rightPanel)
+$form.Controls.Add($rightPanel)
 
 $y = 5
 
@@ -191,18 +133,8 @@ $braveFeatures = @(
     @{ Name = "Disable Brave AI Chat"; Key = "BraveAIChatEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Brave Shields"; Key = "BraveShieldsDisabledForUrls"; Value = '["https://*", "http://*"]'; Type = "String" },
     @{ Name = "Disable Tor"; Key = "TorDisabled"; Value = 1; Type = "DWord" },
-    @{ Name = "Disable Sync"; Key = "SyncDisabled"; Value = 1; Type = "DWord" },
-    @{ Name = "Disable Brave News"; Key = "BraveNewsEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Brave Today"; Key = "BraveTodayEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Binance Widget"; Key = "BinanceWidgetEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Crypto Wallets"; Key = "CryptoWalletsEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Ethereum Provider"; Key = "EthereumProviderEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Solana Provider"; Key = "SolanaProviderEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable NFT Discovery"; Key = "NFTDiscoveryEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Sidebar"; Key = "SidebarEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Leo AI Assistant"; Key = "LeoAIAssistantEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Speedreader"; Key = "SpeedreaderEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Playlist Feature"; Key = "PlaylistEnabled"; Value = 0; Type = "DWord" }
+    @{ Name = "Disable Sync"; Key = "SyncDisabled"; Value = 1; Type = "DWord" }
+    
 )
 
 foreach ($feature in $braveFeatures) {
@@ -214,7 +146,6 @@ foreach ($feature in $braveFeatures) {
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $rightPanel.Controls.Add($checkbox)
     $allFeatures += $checkbox
-    $checkbox.add_CheckedChanged({ Update-SelectedCount })
     $y += 25
 }
 
@@ -240,19 +171,7 @@ $perfFeatures = @(
     @{ Name = "Disable Search Suggestions"; Key = "SearchSuggestEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Printing"; Key = "PrintingEnabled"; Value = 0; Type = "DWord" },
     @{ Name = "Disable Default Browser Prompt"; Key = "DefaultBrowserSettingEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Developer Tools"; Key = "DeveloperToolsDisabled"; Value = 1; Type = "DWord" },
-    @{ Name = "Disable HTTP/2 Server Push"; Key = "Http2ServerPushEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Preloading"; Key = "NetworkPredictionOptions"; Value = 2; Type = "DWord" },
-    @{ Name = "Disable Background Sync"; Key = "BackgroundSyncEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable WebMIDI"; Key = "WebMidiEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable WebXR"; Key = "WebXrEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable WebNFC"; Key = "WebNfcEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Screen Wake Lock"; Key = "ScreenWakeLockEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Idle Detection"; Key = "IdleDetectionEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Auto Downloads"; Key = "DownloadRestrictions"; Value = 3; Type = "DWord" },
-    @{ Name = "Disable AutoPlay"; Key = "AutoplayPolicy"; Value = 2; Type = "DWord" },
-    @{ Name = "Disable Background Tasks"; Key = "BackgroundTasksEnabled"; Value = 0; Type = "DWord" },
-    @{ Name = "Disable Component Updates"; Key = "ComponentUpdatesEnabled"; Value = 0; Type = "DWord" }
+    @{ Name = "Disable Developer Tools"; Key = "DeveloperToolsDisabled"; Value = 1; Type = "DWord" }
 )
 
 foreach ($feature in $perfFeatures) {
@@ -264,41 +183,32 @@ foreach ($feature in $perfFeatures) {
     $checkbox.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $rightPanel.Controls.Add($checkbox)
     $allFeatures += $checkbox
-    $checkbox.add_CheckedChanged({ Update-SelectedCount })
     $y += 25
 }
 
 $y = 780
 
-# Footer panel for controls
-$footerPanel = New-Object System.Windows.Forms.Panel
-$footerPanel.Location = New-Object System.Drawing.Point(20, 650)
-$footerPanel.Size = New-Object System.Drawing.Size(860, 80)
-$footerPanel.BackColor = [System.Drawing.Color]::FromArgb(255, 30, 30, 30)
-$footerPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
-$form.Controls.Add($footerPanel)
-
 $dnsLabel = New-Object System.Windows.Forms.Label
 $dnsLabel.Text = "DNS Over HTTPS Mode:"
-$dnsLabel.Location = New-Object System.Drawing.Point(10, 12)
-$dnsLabel.Size = New-Object System.Drawing.Size(170, 20)
-$footerPanel.Controls.Add($dnsLabel)
+$dnsLabel.Location = New-Object System.Drawing.Point(35, 535)
+$dnsLabel.Size = New-Object System.Drawing.Size(140, 20)
+$form.Controls.Add($dnsLabel)
 
 $dnsDropdown = New-Object System.Windows.Forms.ComboBox
-$dnsDropdown.Location = New-Object System.Drawing.Point(185, 10)
-$dnsDropdown.Size = New-Object System.Drawing.Size(160, 24)
+$dnsDropdown.Location = New-Object System.Drawing.Point(180,530)
+$dnsDropdown.Size = New-Object System.Drawing.Size(150, 20)
 $dnsDropdown.Items.AddRange(@("automatic", "off", "custom"))
 $dnsDropdown.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $dnsDropdown.BackColor = [System.Drawing.Color]::FromArgb(255, 25, 25, 25)
 $dnsDropdown.ForeColor = [System.Drawing.Color]::White
-$footerPanel.Controls.Add($dnsDropdown)
+$form.Controls.Add($dnsDropdown)
 $y += 40
 
 $exportButton = New-Object System.Windows.Forms.Button
 $exportButton.Text = "Export Settings"
-$exportButton.Location = New-Object System.Drawing.Point(360, 8)
-$exportButton.Size = New-Object System.Drawing.Size(115, 30)
-$footerPanel.Controls.Add($exportButton)
+$exportButton.Location = New-Object System.Drawing.Point(50, 580)
+$exportButton.Size = New-Object System.Drawing.Size(120, 30)
+$form.Controls.Add($exportButton)
 $exportButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $exportButton.FlatAppearance.BorderSize = 1
 $exportButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -307,9 +217,9 @@ $exportButton.ForeColor = [System.Drawing.Color]::LightSalmon
 
 $importButton = New-Object System.Windows.Forms.Button
 $importButton.Text = "Import Settings"
-$importButton.Location = New-Object System.Drawing.Point(480, 8)
-$importButton.Size = New-Object System.Drawing.Size(115, 30)
-$footerPanel.Controls.Add($importButton)
+$importButton.Location = New-Object System.Drawing.Point(210, 580)
+$importButton.Size = New-Object System.Drawing.Size(120, 30)
+$form.Controls.Add($importButton)
 $importButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $importButton.FlatAppearance.BorderSize = 1
 $importButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -318,9 +228,9 @@ $importButton.ForeColor = [System.Drawing.Color]::LightSkyBlue
 
 $saveButton = New-Object System.Windows.Forms.Button
 $saveButton.Text = "Apply Settings"
-$saveButton.Location = New-Object System.Drawing.Point(600, 8)
-$saveButton.Size = New-Object System.Drawing.Size(115, 30)
-$footerPanel.Controls.Add($saveButton)
+$saveButton.Location = New-Object System.Drawing.Point(410,580)
+$saveButton.Size = New-Object System.Drawing.Size(120, 30)
+$form.Controls.Add($saveButton)
 $saveButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $saveButton.FlatAppearance.BorderSize = 1
 $saveButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
@@ -344,19 +254,6 @@ $saveButton.Add_Click({
         Set-DnsMode -dnsMode $dnsDropdown.SelectedItem
     }
 
-    # compute applied now by checking which policy keys exist and match configured value
-    $applied = 0
-    foreach ($cb in $allFeatures) {
-        $tag = $cb.Tag
-        try {
-            $current = (Get-ItemProperty -Path $registryPath -Name $tag.Key -ErrorAction SilentlyContinue).$($tag.Key)
-            if ($null -ne $current) {
-                if ($tag.Type -eq 'DWord') { $current = [int]$current }
-                if ($current -eq $tag.Value) { $applied++ }
-            }
-        } catch {}
-    }
-    $appliedCounter.Text = "Applied: $applied"
     [System.Windows.Forms.MessageBox]::Show("Settings applied successfully! Restart Brave to see changes.", "SlimBrave", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 })
 
@@ -396,98 +293,22 @@ function Reset-AllSettings {
 
 $resetButton = New-Object System.Windows.Forms.Button
 $resetButton.Text = "Reset All Settings"
-$resetButton.Location = New-Object System.Drawing.Point(720, 8)
+$resetButton.Location = New-Object System.Drawing.Point(570,580)
 $resetButton.Size = New-Object System.Drawing.Size(120, 30)
-$footerPanel.Controls.Add($resetButton)
+$form.Controls.Add($resetButton)
 $resetButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 $resetButton.FlatAppearance.BorderSize = 1
 $resetButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
 $resetButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
 $resetButton.ForeColor = [System.Drawing.Color]::LightCoral
-
-$selectAllButton = New-Object System.Windows.Forms.Button
-$selectAllButton.Text = "Select All"
-$selectAllButton.Location = New-Object System.Drawing.Point(600, 44)
-$selectAllButton.Size = New-Object System.Drawing.Size(115, 26)
-$footerPanel.Controls.Add($selectAllButton)
-$selectAllButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-$selectAllButton.FlatAppearance.BorderSize = 1
-$selectAllButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
-$selectAllButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
-$selectAllButton.ForeColor = [System.Drawing.Color]::LightGreen
-
-$deselectAllButton = New-Object System.Windows.Forms.Button
-$deselectAllButton.Text = "Deselect All"
-$deselectAllButton.Location = New-Object System.Drawing.Point(720, 44)
-$deselectAllButton.Size = New-Object System.Drawing.Size(120, 26)
-$footerPanel.Controls.Add($deselectAllButton)
-$deselectAllButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-$deselectAllButton.FlatAppearance.BorderSize = 1
-$deselectAllButton.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
-$deselectAllButton.BackColor = [System.Drawing.Color]::FromArgb(150, 102, 102, 102)
-$deselectAllButton.ForeColor = [System.Drawing.Color]::Orange
-
-# Layout: organize footer controls with FlowLayoutPanels for consistent spacing
-$flowTop = New-Object System.Windows.Forms.FlowLayoutPanel
-$flowTop.Dock = [System.Windows.Forms.DockStyle]::Top
-$flowTop.Height = 42
-$flowTop.WrapContents = $false
-$flowTop.FlowDirection = [System.Windows.Forms.FlowDirection]::LeftToRight
-$flowTop.BackColor = [System.Drawing.Color]::FromArgb(255, 30, 30, 30)
-$flowTop.Padding = New-Object System.Windows.Forms.Padding(8,8,8,6)
-$footerPanel.Controls.Add($flowTop)
-
-$dnsLabel.Margin = New-Object System.Windows.Forms.Padding(0,4,8,0)
-$dnsDropdown.Margin = New-Object System.Windows.Forms.Padding(0,2,16,0)
-$exportButton.Margin = New-Object System.Windows.Forms.Padding(0,0,8,0)
-$importButton.Margin = New-Object System.Windows.Forms.Padding(0,0,8,0)
-$saveButton.Margin   = New-Object System.Windows.Forms.Padding(0,0,8,0)
-$resetButton.Margin  = New-Object System.Windows.Forms.Padding(0,0,0,0)
-
-# Move existing controls into the flow container
-$footerPanel.Controls.Remove($dnsLabel);      $flowTop.Controls.Add($dnsLabel)
-$footerPanel.Controls.Remove($dnsDropdown);   $flowTop.Controls.Add($dnsDropdown)
-$footerPanel.Controls.Remove($exportButton);  $flowTop.Controls.Add($exportButton)
-$footerPanel.Controls.Remove($importButton);  $flowTop.Controls.Add($importButton)
-$footerPanel.Controls.Remove($saveButton);    $flowTop.Controls.Add($saveButton)
-$footerPanel.Controls.Remove($resetButton);   $flowTop.Controls.Add($resetButton)
-
-$flowBottom = New-Object System.Windows.Forms.FlowLayoutPanel
-$flowBottom.Dock = [System.Windows.Forms.DockStyle]::Bottom
-$flowBottom.Height = 34
-$flowBottom.WrapContents = $false
-$flowBottom.FlowDirection = [System.Windows.Forms.FlowDirection]::RightToLeft
-$flowBottom.BackColor = [System.Drawing.Color]::FromArgb(255, 30, 30, 30)
-$flowBottom.Padding = New-Object System.Windows.Forms.Padding(8,4,8,6)
-$footerPanel.Controls.Add($flowBottom)
-
-$deselectAllButton.Margin = New-Object System.Windows.Forms.Padding(0,0,0,0)
-$selectAllButton.Margin   = New-Object System.Windows.Forms.Padding(8,0,8,0)
-
-$footerPanel.Controls.Remove($deselectAllButton); $flowBottom.Controls.Add($deselectAllButton)
-$footerPanel.Controls.Remove($selectAllButton);   $flowBottom.Controls.Add($selectAllButton)
+$y += 40
 
 $resetButton.Add_Click({
     if (Reset-AllSettings) {
         if (-not (Test-Path -Path $registryPath)) {
             New-Item -Path $registryPath -Force | Out-Null
         }
-        $appliedCounter.Text = "Applied: 0"
     }
-})
-
-$selectAllButton.Add_Click({
-    foreach ($checkbox in $allFeatures) {
-        $checkbox.Checked = $true
-    }
-    Update-SelectedCount
-})
-
-$deselectAllButton.Add_Click({
-    foreach ($checkbox in $allFeatures) {
-        $checkbox.Checked = $false
-    }
-    Update-SelectedCount
 })
 
 $exportButton.Add_Click({
@@ -545,53 +366,11 @@ $importButton.Add_Click({
                 $dnsDropdown.SelectedItem = $importedSettings.DnsMode
             }
             
-            Update-SelectedCount
             [System.Windows.Forms.MessageBox]::Show("Settings imported successfully from:`n$($openFileDialog.FileName)", "Import Successful", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
         } catch {
             [System.Windows.Forms.MessageBox]::Show("Failed to import settings: $_", "Import Failed", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
         }
     }
 })
-
-[void][System.Reflection.Assembly]::LoadWithPartialName("System.Core")
-Add-Type -AssemblyName System.Core
-
-function Update-SelectedCount {
-    $selected = ($allFeatures | Where-Object { $_.Checked }).Count
-    $totalVisible = ($allFeatures | Where-Object { $_.Visible }).Count
-    if ($totalVisible -eq 0) { $totalVisible = $allFeatures.Count }
-    $selectionCounter.Text = "Selected: $selected / $totalVisible"
-}
-
-function Apply-Filter([string] $query) {
-    $q = if ([string]::IsNullOrWhiteSpace($query)) { "" } else { $query.ToLower() }
-    foreach ($cb in $allFeatures) {
-        if ($q -eq "") {
-            $cb.Visible = $true
-        } else {
-            $textMatch = $cb.Text.ToLower().Contains($q)
-            $keyMatch = ($cb.Tag.Key).ToLower().Contains($q)
-            $cb.Visible = ($textMatch -or $keyMatch)
-        }
-    }
-    Update-SelectedCount
-}
-
-$null = $searchBox.add_TextChanged({ Apply-Filter $searchBox.Text })
-Update-SelectedCount
-
-# Refresh applied counter at load based on registry values
-try {
-    $appliedInit = 0
-    foreach ($cb in $allFeatures) {
-        $tag = $cb.Tag
-        $current = (Get-ItemProperty -Path $registryPath -Name $tag.Key -ErrorAction SilentlyContinue).$($tag.Key)
-        if ($null -ne $current) {
-            if ($tag.Type -eq 'DWord') { $current = [int]$current }
-            if ($current -eq $tag.Value) { $appliedInit++ }
-        }
-    }
-    $appliedCounter.Text = "Applied: $appliedInit"
-} catch {}
 
 [void] $form.ShowDialog()
